@@ -2,7 +2,7 @@
 import { Product } from '../types';
 import { stores } from '../stores';
 
-// Beer product data with reliable image URLs
+// Beer product data with consistent placeholder images
 export const beerProducts: Product[] = [
   {
     id: 'beer-1',
@@ -11,7 +11,7 @@ export const beerProducts: Product[] = [
     price: 16.99,
     originalPrice: 18.99,
     store: stores.ah,
-    discountPercentage: 11,
+    discountPercentage: 10,
     category: 'Bier',
     volume: '24x30cl',
     link: 'https://www.ah.nl/producten/product/wi231599/hertog-jan-pilsener-krat'
@@ -54,12 +54,12 @@ export const beerProducts: Product[] = [
   },
   {
     id: 'beer-5',
-    name: 'La Chouffe Blond Speciaalbier',
+    name: 'La Chouffe Blond',
     imageUrl: '/placeholder.svg',
     price: 1.99,
     originalPrice: 2.39,
     store: stores.ah,
-    discountPercentage: 17,
+    discountPercentage: 16,
     category: 'Bier',
     volume: '33cl',
     link: 'https://www.ah.nl/producten/product/wi128098/la-chouffe-blond-speciaalbier'
@@ -71,7 +71,7 @@ export const beerProducts: Product[] = [
     price: 2.49,
     originalPrice: 2.89,
     store: stores.jumbo,
-    discountPercentage: 14,
+    discountPercentage: 13,
     category: 'Bier',
     volume: '33cl',
     link: 'https://www.jumbo.com/producten/tripel-karmeliet-speciaalbier-33-479895FLS'
@@ -95,7 +95,7 @@ export const beerProducts: Product[] = [
     price: 2.29,
     originalPrice: 2.69,
     store: stores.gall,
-    discountPercentage: 15,
+    discountPercentage: 14,
     category: 'Bier',
     volume: '33cl',
     link: 'https://www.gall.nl/p/duvel-33cl/'

@@ -20,14 +20,8 @@ const simulateApiDelay = async (ms: number = 500): Promise<void> => {
 
 // Helper function to validate product image URLs
 const validateImageUrl = (imageUrl: string): string => {
-  // Use a local placeholder if the URL is suspicious or likely to cause errors
-  if (!imageUrl || 
-      !imageUrl.startsWith('http') || 
-      imageUrl.includes('example.com') ||
-      imageUrl.includes('whiskybase.com')) {
-    return "/placeholder.svg";
-  }
-  return imageUrl;
+  // Always use the placeholder image to ensure consistent loading
+  return "/placeholder.svg";
 };
 
 export async function fetchProducts(filters?: ProductFilters): Promise<Product[]> {
@@ -108,7 +102,7 @@ export async function fetchProductById(id: string): Promise<Product | null> {
       throw new Error('Product niet gevonden');
     }
     
-    // Validate image URL before returning
+    // Use placeholder image for consistent display
     return {
       ...product,
       imageUrl: validateImageUrl(product.imageUrl)

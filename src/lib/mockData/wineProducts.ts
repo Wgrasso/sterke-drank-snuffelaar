@@ -2,7 +2,7 @@
 import { Product } from '../types';
 import { stores } from '../stores';
 
-// Wine product data with reliable image URLs
+// Wine product data with consistent placeholder images
 export const wineProducts: Product[] = [
   {
     id: 'wine-1',
@@ -71,7 +71,7 @@ export const wineProducts: Product[] = [
     price: 7.99,
     originalPrice: 9.49,
     store: stores.ah,
-    discountPercentage: 16,
+    discountPercentage: 15,
     category: 'Wijn',
     volume: '75cl',
     link: 'https://www.ah.nl/producten/product/wi475429/jacob-s-creek-shiraz-cabernet'
