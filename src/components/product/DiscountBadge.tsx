@@ -11,6 +11,9 @@ const DiscountBadge = ({ discountPercentage, className = "" }: DiscountBadgeProp
   // Make sure discount is a valid number and round it
   const validDiscount = isNaN(discountPercentage) ? 0 : Math.round(discountPercentage);
   
+  // Only show badge if there's actually a discount
+  if (validDiscount <= 0) return null;
+  
   return (
     <motion.div
       initial={{ scale: 0.9, opacity: 0 }}
