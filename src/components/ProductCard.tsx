@@ -32,24 +32,34 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, index }: ProductCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [validationState, setValidationState] = useState<ValidationState>('unvalidated');
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
   
   const handleImageLoad = () => {
     setImageLoaded(true);
+    setImageError(false);
+  };
+  
+  const handleImageError = () => {
+    setImageError(true);
+    setImageLoaded(true); // Stop showing loading spinner
   };
   
   const reportProblem = () => {
     setFeedbackOpen(true);
   };
 
-  // Simuleer een willekeurige validatiestatus voor demo
+  // Simulate a random validation status for demo
   useEffect(() => {
-    // 80% kans op gevalideerd, 20% kans op niet gevalideerd
+    // 80% chance of validation, 20% chance of unvalidated
     const isValidated = Math.random() > 0.2;
     setValidationState(isValidated ? 'validated' : 'unvalidated');
   }, []);
+  
+  // Fallback image URL when the original image fails to load
+  const fallbackImageUrl = "/placeholder.svg";
   
   return (
     <>
@@ -71,6 +81,10 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
                         src={product.store.logo} 
                         alt={product.store.name} 
                         className="h-full w-full object-contain p-1"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = fallbackImageUrl;
+                        }}
                       />
                     </div>
                   </TooltipTrigger>
@@ -98,14 +112,25 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
             {/* Product Image */}
             <div className="absolute inset-0 bg-muted/20 flex items-center justify-center p-6">
               <div className="relative w-full h-full image-blur-wrapper">
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className={`w-full h-full object-contain transition-all duration-500 ease-out ${
-                    imageLoaded ? "loaded" : "image-blur"
-                  }`}
-                  onLoad={handleImageLoad}
-                />
+                {imageError ? (
+                  <div className="w-full h-full flex items-center justify-center bg-muted/40">
+                    <img
+                      src={fallbackImageUrl}
+                      alt={product.name}
+                      className="w-2/3 h-2/3 object-contain opacity-50"
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className={`w-full h-full object-contain transition-all duration-500 ease-out ${
+                      imageLoaded ? "loaded" : "image-blur"
+                    }`}
+                    onLoad={handleImageLoad}
+                    onError={handleImageError}
+                  />
+                )}
                 {!imageLoaded && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-10 h-10 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
