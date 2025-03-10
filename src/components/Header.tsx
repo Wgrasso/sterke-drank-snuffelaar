@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Wine, Search, Menu, X, Beer } from 'lucide-react';
@@ -69,15 +70,6 @@ const Header = () => {
               </Link>
               <Link to="/faq" className="text-foreground font-medium hover:text-accent transition-colors">
                 FAQ
-              </Link>
-              <Link
-                to="/scraper"
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-foreground/80",
-                  "px-3 py-2 rounded-md hover:bg-accent/20"
-                )}
-              >
-                Verificatie Tool
               </Link>
             </nav>
           </div>
