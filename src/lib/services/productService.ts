@@ -18,12 +18,30 @@ const simulateApiDelay = async (ms: number = 500): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+// Helper function to validate product image URLs
+const validateImageUrl = (imageUrl: string): string => {
+  // Use a local placeholder if the URL is suspicious or likely to cause errors
+  if (!imageUrl || 
+      !imageUrl.startsWith('http') || 
+      imageUrl.includes('example.com') ||
+      imageUrl.includes('whiskybase.com')) {
+    return "/placeholder.svg";
+  }
+  return imageUrl;
+};
+
 export async function fetchProducts(filters?: ProductFilters): Promise<Product[]> {
   // Simulate API delay
   await simulateApiDelay();
   
   try {
-    let filteredProducts = [...allProducts];
+    // Create a modified copy with validated image URLs
+    const validatedProducts = allProducts.map(product => ({
+      ...product,
+      imageUrl: validateImageUrl(product.imageUrl)
+    }));
+    
+    let filteredProducts = [...validatedProducts];
     
     if (filters) {
       // Filter by category
@@ -90,7 +108,11 @@ export async function fetchProductById(id: string): Promise<Product | null> {
       throw new Error('Product niet gevonden');
     }
     
-    return product;
+    // Validate image URL before returning
+    return {
+      ...product,
+      imageUrl: validateImageUrl(product.imageUrl)
+    };
   } catch (error) {
     console.error('Error fetching product:', error);
     toast.error('Er ging iets mis bij het ophalen van het product.');
@@ -105,7 +127,11 @@ export async function fetchFeaturedProducts(limit: number = 8): Promise<Product[
     // Sort by discount percentage and take the top ones
     const featuredProducts = [...allProducts]
       .sort((a, b) => (b.discountPercentage || 0) - (a.discountPercentage || 0))
-      .slice(0, limit);
+      .slice(0, limit)
+      .map(product => ({
+        ...product,
+        imageUrl: validateImageUrl(product.imageUrl)
+      }));
       
     return featuredProducts;
   } catch (error) {
@@ -121,7 +147,11 @@ export async function fetchProductsByCategory(category: string, limit: number = 
   try {
     const categoryProducts = allProducts
       .filter(p => p.category.toLowerCase() === category.toLowerCase())
-      .slice(0, limit);
+      .slice(0, limit)
+      .map(product => ({
+        ...product,
+        imageUrl: validateImageUrl(product.imageUrl)
+      }));
       
     return categoryProducts;
   } catch (error) {
