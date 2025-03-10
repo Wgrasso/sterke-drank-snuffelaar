@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface ProductImageProps {
   imageUrl: string;
@@ -21,6 +22,7 @@ const ProductImage = ({
   };
   
   const handleImageError = () => {
+    console.log(`Image error loading: ${imageUrl}`);
     setImageError(true);
     setImageLoaded(true); // Stop showing loading spinner
   };
@@ -28,19 +30,23 @@ const ProductImage = ({
   return (
     <div className="relative w-full h-full image-blur-wrapper">
       {imageError ? (
-        <div className="w-full h-full flex items-center justify-center bg-muted/40">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="w-full h-full flex items-center justify-center bg-muted/40"
+        >
           <img
             src={fallbackImageUrl}
             alt={productName}
             className="w-2/3 h-2/3 object-contain opacity-50"
           />
-        </div>
+        </motion.div>
       ) : (
         <img
           src={imageUrl}
           alt={productName}
-          className={`w-full h-full object-contain transition-all duration-500 ease-out ${
-            imageLoaded ? "loaded" : "image-blur"
+          className={`w-full h-full object-contain transition-opacity duration-300 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={handleImageLoad}
           onError={handleImageError}
