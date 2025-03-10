@@ -1,52 +1,61 @@
 
-import { Check, AlertTriangle, Clock } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import React from 'react';
+import { CheckCircle, AlertCircle, Clock } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-type ValidationStatus = 'validated' | 'unvalidated' | 'reported';
+export type ValidationState = 'validated' | 'unvalidated' | 'reported';
 
 interface ProductValidationBadgeProps {
-  status: ValidationStatus;
+  state: ValidationState;
+  showLabel?: boolean;
   className?: string;
 }
 
-const ProductValidationBadge = ({ status, className = '' }: ProductValidationBadgeProps) => {
-  let icon;
-  let text;
-  let colors;
-  let tooltipText;
-  
-  switch (status) {
-    case 'validated':
-      icon = <Check className="w-3 h-3" />;
-      text = 'Gevalideerd';
-      colors = 'bg-green-100 text-green-800 border-green-200';
-      tooltipText = 'Deze aanbieding is door ons team bevestigd';
-      break;
-    case 'reported':
-      icon = <AlertTriangle className="w-3 h-3" />;
-      text = 'Gerapporteerd';
-      colors = 'bg-red-100 text-red-800 border-red-200';
-      tooltipText = 'Deze aanbieding is door gebruikers als mogelijk onjuist gerapporteerd';
-      break;
-    default:
-      icon = <Clock className="w-3 h-3" />;
-      text = 'In behandeling';
-      colors = 'bg-orange-100 text-orange-800 border-orange-200';
-      tooltipText = 'Deze aanbieding wordt momenteel gecontroleerd';
-  }
-  
+const ProductValidationBadge: React.FC<ProductValidationBadgeProps> = ({ 
+  state, 
+  showLabel = true,
+  className = ""
+}) => {
+  const getStateDetails = () => {
+    switch (state) {
+      case 'validated':
+        return {
+          icon: <CheckCircle className="w-3 h-3 mr-1 text-green-600" />,
+          label: 'Gevalideerd',
+          tooltip: 'Deze aanbieding is bevestigd door ons team',
+          classes: 'bg-green-100 text-green-800'
+        };
+      case 'reported':
+        return {
+          icon: <AlertCircle className="w-3 h-3 mr-1 text-red-600" />,
+          label: 'Probleem gemeld',
+          tooltip: 'Er is een probleem gemeld bij deze aanbieding',
+          classes: 'bg-red-100 text-red-800'
+        };
+      case 'unvalidated':
+      default:
+        return {
+          icon: <Clock className="w-3 h-3 mr-1 text-orange-600" />,
+          label: 'Wacht op validatie',
+          tooltip: 'Deze aanbieding wordt momenteel gecontroleerd',
+          classes: 'bg-orange-100 text-orange-800'
+        };
+    }
+  };
+
+  const { icon, label, tooltip, classes } = getStateDetails();
+
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className={`flex items-center gap-1 px-2 ${colors} ${className}`}>
+          <div className={`px-2 py-1 rounded-full text-xs font-medium flex items-center ${classes} ${className}`}>
             {icon}
-            <span className="text-xs font-medium">{text}</span>
-          </Badge>
+            {showLabel && <span>{label}</span>}
+          </div>
         </TooltipTrigger>
-        <TooltipContent side="top">
-          <p>{tooltipText}</p>
+        <TooltipContent side="right">
+          <p>{tooltip}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

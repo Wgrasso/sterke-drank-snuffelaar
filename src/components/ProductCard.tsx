@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import FeedbackForm from './FeedbackForm';
+import ProductValidationBadge from './ProductValidationBadge';
+import { ValidationState } from './ProductValidationBadge';
 
 interface ProductCardProps {
   product: {
@@ -31,11 +33,15 @@ interface ProductCardProps {
 const ProductCard = ({ product, index }: ProductCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [validationState, setValidationState] = useState<'validated' | 'unvalidated' | 'reported'>('unvalidated');
+  const [validationState, setValidationState] = useState<ValidationState>('unvalidated');
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
   
   const handleImageLoad = () => {
     setImageLoaded(true);
+  };
+  
+  const reportProblem = () => {
+    setFeedbackOpen(true);
   };
 
   // Simuleer een willekeurige validatiestatus voor demo
@@ -86,24 +92,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
             
             {/* Validation Badge */}
             <div className="absolute bottom-3 left-3 z-10">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      validationState === 'validated' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-orange-100 text-orange-800'
-                    }`}>
-                      {validationState === 'validated' ? 'Gevalideerd' : 'Wacht op validatie'}
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">
-                    {validationState === 'validated' 
-                      ? 'Deze aanbieding is bevestigd' 
-                      : 'Deze aanbieding wordt momenteel gecontroleerd'}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <ProductValidationBadge state={validationState} showLabel={true} />
             </div>
             
             {/* Product Image */}
@@ -145,7 +134,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
                   variant="outline" 
                   size="sm"
                   className="w-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-background/80 backdrop-blur-sm"
-                  onClick={() => setFeedbackOpen(true)}
+                  onClick={reportProblem}
                 >
                   <AlertTriangle className="w-3 h-3 mr-1" />
                   <span>Meld onjuiste info</span>

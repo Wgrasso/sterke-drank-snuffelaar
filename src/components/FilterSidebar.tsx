@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Filter, X, RefreshCcw, Check } from 'lucide-react';
+import { Filter, X, RefreshCcw, Check, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -29,6 +29,8 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     { id: 'ah', name: 'Albert Heijn' },
     { id: 'dirk', name: 'Dirk' },
     { id: 'drankdozijn', name: 'Drankdozijn' },
+    { id: 'slijterijvandort', name: 'Slijterij van Dort' },
+    { id: 'makro', name: 'Makro' },
   ];
   
   const categories = [
@@ -37,6 +39,9 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     { id: 'rum', name: 'Rum' },
     { id: 'gin', name: 'Gin' },
     { id: 'likeur', name: 'Likeur' },
+    { id: 'cognac', name: 'Cognac' },
+    { id: 'brandy', name: 'Brandy' },
+    { id: 'tequila', name: 'Tequila' },
   ];
 
   // Telkens wanneer filters worden bijgewerkt
@@ -140,10 +145,13 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
           
           <div className="space-y-6 flex-grow">
             {/* Validated Switch */}
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col space-y-1">
-                <Label htmlFor="validated-switch" className="font-medium">Alleen gevalideerd</Label>
-                <span className="text-xs text-muted-foreground">Toon alleen gecontroleerde deals</span>
+            <div className="flex items-center space-x-4">
+              <div className="flex-1 space-y-1">
+                <div className="flex items-center">
+                  <ShieldCheck className="w-4 h-4 mr-2 text-green-600" />
+                  <Label htmlFor="validated-switch" className="font-medium">Gevalideerde deals</Label>
+                </div>
+                <span className="text-xs text-muted-foreground">Toon alleen gecontroleerde aanbiedingen</span>
               </div>
               <Switch
                 id="validated-switch"

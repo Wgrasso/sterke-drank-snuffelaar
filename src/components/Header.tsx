@@ -1,14 +1,17 @@
 
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Wine, Search, Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Wine, Search, Menu, X, Beer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { toast } from "sonner";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +21,17 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/aanbiedingen?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setIsMenuOpen(false);
+    } else {
+      toast.error("Voer een zoekopdracht in");
+    }
+  };
 
   return (
     <header 
@@ -48,22 +62,30 @@ const Header = () => {
           <Link to="/gin" className="text-foreground font-medium hover:text-accent transition-colors">
             Gin
           </Link>
+          <Link to="/likeur" className="text-foreground font-medium hover:text-accent transition-colors">
+            Likeur
+          </Link>
           <Link to="/aanbiedingen" className="text-foreground font-medium hover:text-accent transition-colors">
             <Badge variant="outline" className="bg-accent/10 hover:bg-accent/20 text-accent font-medium">
               Aanbiedingen
             </Badge>
           </Link>
+          <Link to="/faq" className="text-foreground font-medium hover:text-accent transition-colors">
+            FAQ
+          </Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <div className="relative">
+          <form onSubmit={handleSearch} className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input 
               type="search" 
               placeholder="Zoek dranken..." 
               className="pl-10 w-[200px] focus:w-[300px] transition-all duration-300"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
+          </form>
         </div>
 
         {/* Mobile menu button */}
@@ -84,14 +106,16 @@ const Header = () => {
         ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
       `}>
         <div className="container px-4 mx-auto pt-20 flex flex-col gap-6 animate-fade-in">
-          <div className="relative mx-auto w-full max-w-md mb-4">
+          <form onSubmit={handleSearch} className="relative mx-auto w-full max-w-md mb-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input 
               type="search" 
               placeholder="Zoek dranken..." 
               className="pl-10 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
+          </form>
           
           <nav className="flex flex-col items-center gap-6 text-lg">
             <Link 
@@ -130,6 +154,13 @@ const Header = () => {
               Gin
             </Link>
             <Link 
+              to="/likeur" 
+              className="text-foreground font-medium hover:text-accent transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Likeur
+            </Link>
+            <Link 
               to="/aanbiedingen" 
               className="text-foreground font-medium hover:text-accent transition-colors"
               onClick={() => setIsMenuOpen(false)}
@@ -137,6 +168,13 @@ const Header = () => {
               <Badge variant="outline" className="bg-accent/10 hover:bg-accent/20 text-accent font-medium">
                 Aanbiedingen
               </Badge>
+            </Link>
+            <Link 
+              to="/faq" 
+              className="text-foreground font-medium hover:text-accent transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              FAQ
             </Link>
           </nav>
         </div>
