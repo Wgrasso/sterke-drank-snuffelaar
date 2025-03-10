@@ -194,6 +194,8 @@ export async function fetchProducts(filters?: {
   search?: string;
   priceRange?: [number, number];
   stores?: string[];
+  onlyValidated?: boolean;
+  onlyDiscounted?: boolean;
 }): Promise<Product[]> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -233,6 +235,21 @@ export async function fetchProducts(filters?: {
           
           return storeId ? filters.stores!.includes(storeId) : false;
         });
+      }
+
+      // Filter by validation status (implementeer simulatie hier)
+      if (filters.onlyValidated) {
+        // Voor demo-doeleinden zullen we willekeurig producten filteren
+        filteredProducts = filteredProducts.filter(
+          () => Math.random() > 0.3 // 70% kans om opgenomen te worden
+        );
+      }
+
+      // Filter by discount
+      if (filters.onlyDiscounted) {
+        filteredProducts = filteredProducts.filter(
+          product => product.originalPrice && product.price < product.originalPrice
+        );
       }
     }
     

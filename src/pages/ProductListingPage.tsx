@@ -21,6 +21,8 @@ const ProductListingPage = () => {
     priceRange: [0, 100] as [number, number],
     selectedStores: [] as string[],
     selectedCategories: [] as string[],
+    onlyValidated: false,
+    onlyDiscounted: false,
   });
   
   const { data: products, isLoading, isError } = useQuery({
@@ -30,6 +32,8 @@ const ProductListingPage = () => {
       search: searchQuery,
       priceRange: filters.priceRange,
       stores: filters.selectedStores.length ? filters.selectedStores : undefined,
+      onlyValidated: filters.onlyValidated,
+      onlyDiscounted: filters.onlyDiscounted,
     }),
   });
   
