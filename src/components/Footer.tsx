@@ -73,6 +73,11 @@ const Footer = () => {
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
+                  Dirk 3
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-accent transition-colors">
                   Drankdozijn
                 </a>
               </li>

@@ -23,6 +23,11 @@ const stores = [
     logo: 'https://www.dirk.nl/assets/images/dirk-logo.svg'
   },
   {
+    id: 'dirk3',
+    name: 'Dirk 3',
+    logo: 'https://www.dirk.nl/assets/images/dirk-logo.svg'
+  },
+  {
     id: 'drankdozijn',
     name: 'Drankdozijn',
     logo: 'https://media.drankdozijn.nl/catalog/logo/drankdozijn-logo.png'

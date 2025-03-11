@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Filter, X, RefreshCcw, Check, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -28,6 +27,7 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     { id: 'jumbo', name: 'Jumbo' },
     { id: 'ah', name: 'Albert Heijn' },
     { id: 'dirk', name: 'Dirk' },
+    { id: 'dirk3', name: 'Dirk 3' },
     { id: 'drankdozijn', name: 'Drankdozijn' },
     { id: 'slijterijvandort', name: 'Slijterij van Dort' },
     { id: 'makro', name: 'Makro' },
@@ -44,7 +44,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     { id: 'tequila', name: 'Tequila' },
   ];
 
-  // Telkens wanneer filters worden bijgewerkt
   useEffect(() => {
     const timeout = setTimeout(() => {
       applyFilters();
@@ -99,7 +98,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     });
   };
 
-  // Tel het aantal actieve filters
   const activeFilterCount = 
     (priceRange[0] > 0 || priceRange[1] < 100 ? 1 : 0) + 
     selectedStores.length + 
@@ -109,7 +107,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
 
   return (
     <>
-      {/* Mobile overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
@@ -123,7 +120,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
         )}
       </AnimatePresence>
       
-      {/* Sidebar */}
       <div 
         className={`fixed md:sticky top-0 h-screen md:h-[calc(100vh-4rem)] overflow-y-auto w-[300px] md:w-[260px] bg-background md:bg-transparent border-r md:border-r-0 z-50 transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
@@ -144,7 +140,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
           </div>
           
           <div className="space-y-6 flex-grow">
-            {/* Validated Switch */}
             <div className="flex items-center space-x-4">
               <div className="flex-1 space-y-1">
                 <div className="flex items-center">
@@ -160,7 +155,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
               />
             </div>
 
-            {/* Discounted Switch */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col space-y-1">
                 <Label htmlFor="discount-switch" className="font-medium">Alleen aanbiedingen</Label>
@@ -175,7 +169,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
             
             <Separator />
             
-            {/* Price Range */}
             <div>
               <h3 className="font-medium mb-4">Prijsrange</h3>
               <div className="mb-6">
@@ -196,7 +189,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
             
             <Separator />
             
-            {/* Stores */}
             <div>
               <h3 className="font-medium mb-4">Winkels</h3>
               <div className="space-y-2">
@@ -223,7 +215,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
             
             <Separator />
             
-            {/* Categories */}
             <div>
               <h3 className="font-medium mb-4">Categorieën</h3>
               <div className="flex flex-wrap gap-2">

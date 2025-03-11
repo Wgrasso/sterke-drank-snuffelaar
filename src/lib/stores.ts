@@ -19,6 +19,10 @@ export const stores: Record<string, Store> = {
     name: 'Dirk',
     logo: 'https://www.dirk.nl/assets/images/dirk-logo.svg'
   },
+  dirk3: {
+    name: 'Dirk 3',
+    logo: 'https://www.dirk.nl/assets/images/dirk-logo.svg'
+  },
   drankdozijn: {
     name: 'Drankdozijn',
     logo: 'https://media.drankdozijn.nl/catalog/logo/drankdozijn-logo.png'
