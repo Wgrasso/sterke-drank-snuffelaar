@@ -7,7 +7,7 @@ const categories = [
     id: 'whisky',
     name: 'Whisky',
     description: 'De beste whisky aanbiedingen',
-    image: 'https://images.unsplash.com/photo-1560179406-1c6c60e0dc76?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-amber-500/60 to-amber-800/60',
     link: '/whisky'
   },
@@ -15,7 +15,7 @@ const categories = [
     id: 'vodka',
     name: 'Vodka',
     description: 'Zuivere vodka voor minder',
-    image: 'https://images.unsplash.com/photo-1614716125163-5e321f55c951?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1607622750671-6cd9a99eabd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-blue-500/60 to-blue-800/60',
     link: '/vodka'
   },

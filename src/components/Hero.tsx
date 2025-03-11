@@ -23,9 +23,9 @@ const slides = [
   {
     title: "Alles voor de perfecte cocktail",
     description: "Van premium gins tot exclusieve rums. Vind alle ingrediënten voor je favoriete cocktails tegen de beste prijzen.",
-    image: "https://images.unsplash.com/photo-1596992644600-05ceadd0de2a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1587223962930-cb7f31384c19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     cta: "Ontdek cocktail deals",
-    link: "/cocktails"
+    link: "/gin"
   }
 ];
 
