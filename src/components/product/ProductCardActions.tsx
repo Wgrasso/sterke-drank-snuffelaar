@@ -52,16 +52,6 @@ const ProductCardActions = ({ productLink, onReportProblem }: ProductCardActions
             </Button>
           </a>
         )}
-        
-        <Button 
-          variant="outline" 
-          size="sm"
-          className="w-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-background/80 backdrop-blur-sm"
-          onClick={onReportProblem}
-        >
-          <AlertTriangle className="w-3 h-3 mr-1" />
-          <span>Meld onjuiste info</span>
-        </Button>
       </div>
     </div>
   );
