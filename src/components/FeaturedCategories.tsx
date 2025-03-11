@@ -53,7 +53,14 @@ const FeaturedCategories = () => {
             >
               <Link to={category.link} className="block h-full">
                 <div className="relative h-80 rounded-lg overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 z-10" />
+                  {/* Enhanced gradient overlay with a subtle pattern */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 z-10">
+                    <img 
+                      src="https://images.unsplash.com/photo-1541795795328-f073b763494e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                      alt="Overlay texture" 
+                      className="w-full h-full object-cover opacity-10 mix-blend-overlay"
+                    />
+                  </div>
                   <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0`} />
                   
                   <img 
