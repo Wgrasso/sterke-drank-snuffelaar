@@ -26,12 +26,12 @@ const categoryInfo = {
   rum: {
     title: "Rum Aanbiedingen",
     description: "Exotische rums uit het Caribisch gebied en Latijns-Amerika voor de echte liefhebber.",
-    image: "https://images.unsplash.com/photo-1514218953589-2d7d87fe578e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1598631048795-07a598e6dabc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   gin: {
     title: "Gin Aanbiedingen",
     description: "Ontdek de wereld van gin met klassieke en botanische varianten tegen scherpe prijzen.",
-    image: "https://images.unsplash.com/photo-1620223877391-f8a8b7d13504?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1608885898957-91a0dc10586f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   likeur: {
     title: "Likeur Aanbiedingen",

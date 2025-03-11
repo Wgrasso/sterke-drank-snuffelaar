@@ -5,7 +5,7 @@ const stores = [
   {
     id: 'gall',
     name: 'Gall & Gall',
-    logo: 'https://www.gall.nl/medias/sys_master/images/images/h0b/h9c/8879964651550/galogo.svg'
+    logo: 'https://static.s-moda.nl/img/logos/gall.svg'
   },
   {
     id: 'ah',
@@ -25,7 +25,7 @@ const stores = [
   {
     id: 'drankdozijn',
     name: 'Drankdozijn',
-    logo: 'https://www.drankdozijn.nl/static/version1686820612/frontend/Laco/default/nl_NL/images/logo.svg'
+    logo: 'https://media.drankdozijn.nl/catalog/logo/drankdozijn-logo.png'
   }
 ];
 

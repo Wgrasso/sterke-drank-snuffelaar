@@ -23,7 +23,7 @@ const categories = [
     id: 'rum',
     name: 'Rum',
     description: 'Exotische rum aanbiedingen',
-    image: 'https://images.unsplash.com/photo-1514218953589-2d7d87fe578e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1598631048795-07a598e6dabc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-amber-700/60 to-red-900/60',
     link: '/rum'
   },
@@ -31,7 +31,7 @@ const categories = [
     id: 'gin',
     name: 'Gin',
     description: 'Speciale gin deals',
-    image: 'https://images.unsplash.com/photo-1620223877391-f8a8b7d13504?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1608885898957-91a0dc10586f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-emerald-500/60 to-emerald-800/60',
     link: '/gin'
   }
