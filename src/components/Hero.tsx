@@ -9,21 +9,21 @@ const slides = [
   {
     title: "De beste drankdeals van Nederland",
     description: "Vergelijk prijzen van sterke drank bij alle grote winkels in Nederland en vind de beste aanbiedingen.",
-    image: "https://images.unsplash.com/photo-1509807995916-c332365e2d9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1567871099018-269e513d01fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     cta: "Bekijk aanbiedingen",
     link: "/aanbiedingen"
   },
   {
     title: "Premium whisky's voor minder",
     description: "Ontdek de beste whisky's tegen de scherpste prijzen. Altijd up-to-date met de nieuwste aanbiedingen.",
-    image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1574725502811-ad55b7776797?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     cta: "Bekijk whisky deals",
     link: "/whisky"
   },
   {
     title: "Alles voor de perfecte cocktail",
     description: "Van premium gins tot exclusieve rums. Vind alle ingrediënten voor je favoriete cocktails tegen de beste prijzen.",
-    image: "https://images.unsplash.com/photo-1587223962930-cb7f31384c19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     cta: "Ontdek cocktail deals",
     link: "/gin"
   }

@@ -11,7 +11,7 @@ interface ProductImageProps {
 const ProductImage = ({ 
   imageUrl, 
   productName, 
-  fallbackImageUrl = "/placeholder.svg" 
+  fallbackImageUrl = "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
 }: ProductImageProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -38,7 +38,7 @@ const ProductImage = ({
           <img
             src={fallbackImageUrl}
             alt={productName}
-            className="w-2/3 h-2/3 object-contain opacity-50"
+            className="w-2/3 h-2/3 object-contain opacity-80"
           />
         </motion.div>
       ) : (

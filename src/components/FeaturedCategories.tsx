@@ -7,7 +7,7 @@ const categories = [
     id: 'whisky',
     name: 'Whisky',
     description: 'De beste whisky aanbiedingen',
-    image: 'https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1582819509237-76bcaad22ef9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-amber-500/60 to-amber-800/60',
     link: '/whisky'
   },
@@ -15,7 +15,7 @@ const categories = [
     id: 'vodka',
     name: 'Vodka',
     description: 'Zuivere vodka voor minder',
-    image: 'https://images.unsplash.com/photo-1607622750671-6cd9a99eabd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1613063020776-2eccee4e4fb5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-blue-500/60 to-blue-800/60',
     link: '/vodka'
   },
@@ -23,7 +23,7 @@ const categories = [
     id: 'rum',
     name: 'Rum',
     description: 'Exotische rum aanbiedingen',
-    image: 'https://images.unsplash.com/photo-1514218953589-2d7d87fe578e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1598097301772-72e28fcfcf0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-amber-700/60 to-red-900/60',
     link: '/rum'
   },
@@ -31,7 +31,7 @@ const categories = [
     id: 'gin',
     name: 'Gin',
     description: 'Speciale gin deals',
-    image: 'https://images.unsplash.com/photo-1620223877391-f8a8b7d13504?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1609345265499-811043f7100a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
     color: 'from-emerald-500/60 to-emerald-800/60',
     link: '/gin'
   }
