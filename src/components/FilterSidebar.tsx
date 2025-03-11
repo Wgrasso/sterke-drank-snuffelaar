@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Filter, X, RefreshCcw, Check, ShieldCheck } from 'lucide-react';
+import { Filter, X, RefreshCcw, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -19,7 +19,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
   const [selectedStores, setSelectedStores] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [onlyValidated, setOnlyValidated] = useState(false);
   const [onlyDiscounted, setOnlyDiscounted] = useState(false);
   
   const stores = [
@@ -50,7 +49,7 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     }, 500);
     
     return () => clearTimeout(timeout);
-  }, [priceRange, selectedStores, selectedCategories, onlyValidated, onlyDiscounted]);
+  }, [priceRange, selectedStores, selectedCategories, onlyDiscounted]);
   
   const handleStoreToggle = (storeId: string) => {
     setSelectedStores(prev => 
@@ -77,7 +76,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
       priceRange,
       selectedStores,
       selectedCategories,
-      onlyValidated,
       onlyDiscounted,
     });
   };
@@ -86,14 +84,12 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     setPriceRange([0, 100]);
     setSelectedStores([]);
     setSelectedCategories([]);
-    setOnlyValidated(false);
     setOnlyDiscounted(false);
     
     onFilterChange({
       priceRange: [0, 100],
       selectedStores: [],
       selectedCategories: [],
-      onlyValidated: false,
       onlyDiscounted: false,
     });
   };
@@ -102,7 +98,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
     (priceRange[0] > 0 || priceRange[1] < 100 ? 1 : 0) + 
     selectedStores.length + 
     selectedCategories.length +
-    (onlyValidated ? 1 : 0) +
     (onlyDiscounted ? 1 : 0);
 
   return (
@@ -140,21 +135,6 @@ const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) 
           </div>
           
           <div className="space-y-6 flex-grow">
-            <div className="flex items-center space-x-4">
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center">
-                  <ShieldCheck className="w-4 h-4 mr-2 text-green-600" />
-                  <Label htmlFor="validated-switch" className="font-medium">Gevalideerde deals</Label>
-                </div>
-                <span className="text-xs text-muted-foreground">Toon alleen gecontroleerde aanbiedingen</span>
-              </div>
-              <Switch
-                id="validated-switch"
-                checked={onlyValidated}
-                onCheckedChange={setOnlyValidated}
-              />
-            </div>
-
             <div className="flex items-center justify-between">
               <div className="flex flex-col space-y-1">
                 <Label htmlFor="discount-switch" className="font-medium">Alleen aanbiedingen</Label>

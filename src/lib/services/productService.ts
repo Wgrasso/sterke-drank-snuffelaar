@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 import { Product, ProductFilters } from '../types';
 import { liquorProducts } from '../mockData/liquorProducts';
@@ -66,14 +65,6 @@ export async function fetchProducts(filters?: ProductFilters): Promise<Product[]
           const storeId = getStoreIdByName(product.store.name);
           return storeId ? filters.stores!.includes(storeId) : false;
         });
-      }
-
-      // Filter by validation status
-      if (filters.onlyValidated) {
-        // Voor demo-doeleinden zullen we willekeurig producten filteren
-        filteredProducts = filteredProducts.filter(
-          () => Math.random() > 0.3 // 70% kans om opgenomen te worden
-        );
       }
 
       // Filter by discount

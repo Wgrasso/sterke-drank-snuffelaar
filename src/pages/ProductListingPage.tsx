@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
@@ -11,7 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
-// Category-specific banners and descriptions
 const categoryInfo = {
   whisky: {
     title: "Whisky Aanbiedingen",
@@ -56,7 +54,6 @@ const ProductListingPage = () => {
     priceRange: [0, 100] as [number, number],
     selectedStores: [] as string[],
     selectedCategories: [] as string[],
-    onlyValidated: false,
     onlyDiscounted: false,
   });
   
@@ -67,7 +64,6 @@ const ProductListingPage = () => {
       search: searchQuery,
       priceRange: filters.priceRange,
       stores: filters.selectedStores.length ? filters.selectedStores : undefined,
-      onlyValidated: filters.onlyValidated,
       onlyDiscounted: filters.onlyDiscounted,
     }),
   });
@@ -92,7 +88,6 @@ const ProductListingPage = () => {
       <Header />
       
       <main className="flex-grow pt-16">
-        {/* Category Banner */}
         <div className="relative h-[200px] md:h-[250px] overflow-hidden">
           <div className="absolute inset-0 bg-black/50 z-10" />
           <img 

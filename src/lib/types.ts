@@ -24,6 +24,5 @@ export interface ProductFilters {
   search?: string;
   priceRange?: [number, number];
   stores?: string[];
-  onlyValidated?: boolean;
   onlyDiscounted?: boolean;
 }

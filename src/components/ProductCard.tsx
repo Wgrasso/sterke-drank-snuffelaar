@@ -1,9 +1,8 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
-import ProductValidationBadge, { ValidationState } from './ProductValidationBadge';
 import ProductImage from './product/ProductImage';
 import StoreBadge from './product/StoreBadge';
 import DiscountBadge from './product/DiscountBadge';
@@ -32,19 +31,11 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, index }: ProductCardProps) => {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [validationState, setValidationState] = useState<ValidationState>('unvalidated');
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
   
   const reportProblem = () => {
     setFeedbackOpen(true);
   };
-
-  // Simulate a random validation status for demo
-  useEffect(() => {
-    // 80% chance of validation, 20% chance of unvalidated
-    const isValidated = Math.random() > 0.2;
-    setValidationState(isValidated ? 'validated' : 'unvalidated');
-  }, []);
   
   return (
     <>
@@ -71,10 +62,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
               </div>
             )}
             
-            {/* Validation Badge */}
-            <div className="absolute bottom-3 left-3 z-10">
-              <ProductValidationBadge state={validationState} showLabel={true} />
-            </div>
+            {/* Removed the validation badge */}
             
             {/* Product Image */}
             <div className="absolute inset-0 bg-muted/20 flex items-center justify-center p-6">
