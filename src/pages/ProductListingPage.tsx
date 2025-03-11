@@ -16,32 +16,32 @@ const categoryInfo = {
   whisky: {
     title: "Whisky Aanbiedingen",
     description: "Ontdek de beste whisky's van Schotland, Ierland, Amerika en Japan tegen scherpe prijzen.",
-    image: "https://images.unsplash.com/photo-1566618501215-50b34ebe4cfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   vodka: {
     title: "Vodka Aanbiedingen",
     description: "Premium vodka's uit Rusland, Polen, Zweden en wereldwijd tegen de beste prijzen.",
-    image: "https://images.unsplash.com/photo-1613950452881-326922853222?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1607622750671-6cd9a99eabd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   rum: {
     title: "Rum Aanbiedingen",
     description: "Exotische rums uit het Caribisch gebied en Latijns-Amerika voor de echte liefhebber.",
-    image: "https://images.unsplash.com/photo-1599021456807-1d9982e2e45b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1514218953589-2d7d87fe578e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   gin: {
     title: "Gin Aanbiedingen",
     description: "Ontdek de wereld van gin met klassieke en botanische varianten tegen scherpe prijzen.",
-    image: "https://images.unsplash.com/photo-1598932248380-453eb437e2bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1620223877391-f8a8b7d13504?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   likeur: {
     title: "Likeur Aanbiedingen",
     description: "Zoete en aromatische likeuren in alle smaken voor cocktails en desserts.",
-    image: "https://images.unsplash.com/photo-1603833969823-9f2ca212e706?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1588685562217-8147530e5874?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   },
   aanbiedingen: {
     title: "Alle Aanbiedingen",
     description: "De beste drank deals van dit moment, verzameld van alle grote Nederlandse slijterijen.",
-    image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+    image: "https://images.unsplash.com/photo-1509807995916-c332365e2d9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
   }
 };
 

@@ -5,17 +5,17 @@ const stores = [
   {
     id: 'gall',
     name: 'Gall & Gall',
-    logo: 'https://www.gall.nl/on/demandware.static/Sites-gall-nl-Site/-/default/dw1c28ad01/images/gall-logo.svg'
+    logo: 'https://www.gall.nl/medias/sys_master/images/images/h0b/h9c/8879964651550/galogo.svg'
   },
   {
     id: 'ah',
     name: 'Albert Heijn',
-    logo: 'https://www.ah.nl/favicon.ico'
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Albert_Heijn_Logo.svg'
   },
   {
     id: 'jumbo',
     name: 'Jumbo',
-    logo: 'https://www.jumbo.com/dam/jcr:3a89625b-174f-4603-b340-6eaa3c3d7917/jumbo-logo-torch.png'
+    logo: 'https://www.jumbo.com/favicon.ico'
   },
   {
     id: 'dirk',
