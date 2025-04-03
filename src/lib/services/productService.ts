@@ -43,9 +43,9 @@ export async function fetchProducts(filters?: ProductFilters): Promise<Product[]
     
     // Apply filters
     if (filters) {
-      // Filter by category
+      // Filter by category - fix case sensitivity by using case-insensitive comparison
       if (filters.category) {
-        query = query.ilike('category', filters.category);
+        query = query.ilike('category', `%${filters.category}%`);
       }
       
       // Filter by search
@@ -72,6 +72,9 @@ export async function fetchProducts(filters?: ProductFilters): Promise<Product[]
     const { data, error } = await query;
     
     if (error) throw error;
+    
+    // Let's add some debugging to see what's coming back
+    console.log('Products fetched:', data && data.length);
     
     // Transform database rows to Product objects
     return (data || []).map(mapDbRowToProduct);

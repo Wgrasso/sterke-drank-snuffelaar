@@ -18,10 +18,34 @@ export async function seedProducts() {
       return { success: true, message: 'Database already has products' };
     }
     
+    // First we need to check if stores exist
+    const { data: stores, error: storesError } = await supabase
+      .from('stores')
+      .select('*');
+      
+    if (storesError) throw storesError;
+    
+    // If no stores exist, create them
+    if (!stores || stores.length === 0) {
+      const storeData = [
+        { id: 'gall', name: 'Gall & Gall', logo: '/gall-logo.svg' },
+        { id: 'ah', name: 'Albert Heijn', logo: '/ah-logo.svg' },
+        { id: 'jumbo', name: 'Jumbo', logo: '/jumbo-logo.svg' },
+        { id: 'dirk', name: 'Dirk', logo: '/dirk-logo.svg' },
+        { id: 'mitra', name: 'Mitra', logo: '/mitra-logo.svg' }
+      ];
+      
+      const { error: insertStoresError } = await supabase
+        .from('stores')
+        .insert(storeData);
+        
+      if (insertStoresError) throw insertStoresError;
+    }
+    
     const sampleProducts = [
       {
         name: 'Bombay Sapphire Gin',
-        image_url: 'https://static.drankdozijn.nl/products/17000/original/bombay-sapphire-london-dry-gin-1-liter_1.png',
+        image_url: '/placeholder.svg',
         price: 29.99,
         original_price: 36.99,
         discount_percentage: 19,

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useSearchParams, useLocation } from 'react-router-dom';
@@ -8,7 +9,9 @@ import ProductGrid from '@/components/ProductGrid';
 import FilterSidebar from '@/components/FilterSidebar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
+import { X, Database } from 'lucide-react';
+import { seedProducts } from '@/lib/utils/seedDatabase';
+import { toast } from 'sonner';
 
 const categoryInfo = {
   whisky: {
@@ -57,7 +60,7 @@ const ProductListingPage = () => {
     onlyDiscounted: false,
   });
   
-  const { data: products, isLoading, isError } = useQuery({
+  const { data: products, isLoading, isError, refetch } = useQuery({
     queryKey: ['products', category, searchQuery, filters],
     queryFn: () => fetchProducts({
       category: category !== 'aanbiedingen' ? category : undefined,
@@ -75,6 +78,16 @@ const ProductListingPage = () => {
   const clearSearch = () => {
     searchParams.delete('q');
     setSearchParams(searchParams);
+  };
+
+  const handleSeedDatabase = async () => {
+    const result = await seedProducts();
+    if (result.success) {
+      toast.success('Database seeded successfully');
+      refetch(); // Refresh the product list
+    } else {
+      toast.error('Failed to seed database');
+    }
   };
   
   const currentCategoryInfo = categoryInfo[category as keyof typeof categoryInfo] || categoryInfo.aanbiedingen;
@@ -144,10 +157,27 @@ const ProductListingPage = () => {
                   </Button>
                 </div>
               ) : (
-                <ProductGrid 
-                  products={products || []}
-                  onFilterClick={() => setIsFilterOpen(true)}
-                />
+                <>
+                  {(!products || products.length === 0) && (
+                    <div className="text-center py-12 mb-6">
+                      <h3 className="text-xl font-medium mb-2">Geen producten gevonden</h3>
+                      <p className="text-muted-foreground mb-6">
+                        Er zijn nog geen producten in de database. Klik op de knop hieronder om testproducten toe te voegen.
+                      </p>
+                      <Button 
+                        onClick={handleSeedDatabase}
+                        className="flex items-center gap-2"
+                      >
+                        <Database className="w-4 h-4" />
+                        <span>Vul database met testproducten</span>
+                      </Button>
+                    </div>
+                  )}
+                  <ProductGrid 
+                    products={products || []}
+                    onFilterClick={() => setIsFilterOpen(true)}
+                  />
+                </>
               )}
             </div>
           </div>
