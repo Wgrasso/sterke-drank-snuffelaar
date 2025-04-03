@@ -1,6 +1,6 @@
 
 // Export specific named exports instead of using star exports
-export { Product, ProductFilters, ProductCategory, Store } from './types';
+export type { Product, ProductFilters, ProductCategory, Store } from './types';
 export { 
   fetchProducts, 
   fetchProductById, 
