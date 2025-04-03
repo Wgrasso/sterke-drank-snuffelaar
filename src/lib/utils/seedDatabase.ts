@@ -61,6 +61,8 @@ export async function seedProducts() {
     }
     
     console.log('Inserting sample products...');
+    
+    // Insert products one by one to better handle potential errors
     const sampleProducts = [
       {
         name: 'Bombay Sapphire Gin',
@@ -94,103 +96,47 @@ export async function seedProducts() {
         volume: '70cl',
         link: 'https://www.jumbo.com/producten/absolut-vodka-70cl-123456',
         store_id: 'jumbo'
-      },
-      {
-        name: 'Bacardi Carta Blanca',
-        image_url: '/placeholder.svg',
-        price: 18.99,
-        original_price: 22.99,
-        discount_percentage: 17,
-        category: 'Rum',
-        volume: '70cl',
-        link: 'https://www.dirk.nl/producten/bacardi-carta-blanca-70cl-123456',
-        store_id: 'dirk'
-      },
-      {
-        name: 'Jack Daniel\'s Tennessee Whiskey',
-        image_url: '/placeholder.svg',
-        price: 29.99,
-        original_price: 34.99,
-        discount_percentage: 14,
-        category: 'Whisky',
-        volume: '100cl',
-        link: 'https://www.mitra.nl/producten/jack-daniels-tennessee-whiskey-100cl-123456',
-        store_id: 'mitra'
-      },
-      {
-        name: 'Hendrick\'s Gin',
-        image_url: '/placeholder.svg',
-        price: 36.99,
-        original_price: 42.99,
-        discount_percentage: 14,
-        category: 'Gin',
-        volume: '70cl',
-        link: 'https://www.gall.nl/producten/hendricks-gin-70cl-123456',
-        store_id: 'gall'
-      },
-      {
-        name: 'Grey Goose Vodka',
-        image_url: '/placeholder.svg',
-        price: 39.99,
-        original_price: 46.99,
-        discount_percentage: 15,
-        category: 'Vodka',
-        volume: '70cl',
-        link: 'https://www.ah.nl/producten/grey-goose-vodka-70cl-123456',
-        store_id: 'ah'
-      },
-      {
-        name: 'Talisker 10 Years',
-        image_url: '/placeholder.svg',
-        price: 42.99,
-        original_price: 49.99,
-        discount_percentage: 14,
-        category: 'Whisky',
-        volume: '70cl',
-        link: 'https://www.jumbo.com/producten/talisker-10-years-70cl-123456',
-        store_id: 'jumbo'
-      },
-      {
-        name: 'Cointreau',
-        image_url: '/placeholder.svg',
-        price: 22.99,
-        original_price: 27.99,
-        discount_percentage: 18,
-        category: 'Likeur',
-        volume: '70cl',
-        link: 'https://www.dirk.nl/producten/cointreau-70cl-123456',
-        store_id: 'dirk'
-      },
-      {
-        name: 'Remy Martin VSOP',
-        image_url: '/placeholder.svg',
-        price: 44.99,
-        original_price: 52.99,
-        discount_percentage: 15,
-        category: 'Cognac',
-        volume: '70cl',
-        link: 'https://www.mitra.nl/producten/remy-martin-vsop-70cl-123456',
-        store_id: 'mitra'
       }
     ];
     
-    // Insert sample products
-    const { data, error } = await supabase
-      .from('products')
-      .insert(sampleProducts)
-      .select();
+    // Insert each product individually to better trace any issues
+    const successfulInserts = [];
     
-    if (error) {
-      console.error('Error inserting products:', error);
-      throw error;
+    for (const product of sampleProducts) {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .insert(product)
+          .select();
+        
+        if (error) {
+          console.error(`Error inserting product ${product.name}:`, error);
+        } else {
+          console.log(`Successfully inserted product: ${product.name}`);
+          successfulInserts.push(data[0]);
+        }
+      } catch (err) {
+        console.error(`Exception inserting product ${product.name}:`, err);
+      }
     }
     
-    console.log('Successfully seeded database with sample products:', data);
-    toast.success('Database succesvol gevuld met voorbeeldproducten');
-    return { success: true, message: 'Database seeded successfully', data };
+    if (successfulInserts.length === 0) {
+      throw new Error('Failed to insert any products');
+    }
+    
+    console.log(`Successfully seeded database with ${successfulInserts.length} products`);
+    toast.success(`Database succesvol gevuld met ${successfulInserts.length} voorbeeldproducten`);
+    return { 
+      success: true, 
+      message: `Database seeded successfully with ${successfulInserts.length} products`, 
+      data: successfulInserts 
+    };
   } catch (error) {
     console.error('Error seeding database:', error);
     toast.error('Er ging iets mis bij het vullen van de database.');
-    return { success: false, message: `Error seeding database: ${error instanceof Error ? error.message : String(error)}` };
+    return { 
+      success: false, 
+      message: `Error seeding database: ${error instanceof Error ? error.message : String(error)}` 
+    };
   }
 }

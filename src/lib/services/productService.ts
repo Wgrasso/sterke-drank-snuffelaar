@@ -19,8 +19,8 @@ const mapDbRowToProduct = (row: any): Product => {
     price: parseFloat(row.price),
     originalPrice: row.original_price ? parseFloat(row.original_price) : undefined,
     store: {
-      name: row.stores.name,
-      logo: row.stores.logo
+      name: row.stores?.name || 'Unknown Store',
+      logo: row.stores?.logo || '/placeholder.svg'
     },
     discountPercentage: row.discount_percentage,
     category: row.category,
