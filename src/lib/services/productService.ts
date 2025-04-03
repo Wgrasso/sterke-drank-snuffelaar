@@ -167,5 +167,3 @@ export async function fetchProductsByCategory(category: string, limit: number = 
     return [];
   }
 }
-
-// We can now remove the mock data import since we're using Supabase

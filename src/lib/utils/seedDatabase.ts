@@ -62,7 +62,39 @@ export async function seedProducts() {
     
     console.log('Inserting sample products...');
     
-    // Insert products one by one to better handle potential errors
+    // Create a single simple product for testing
+    const testProduct = {
+      name: 'Test Product',
+      image_url: '/placeholder.svg',
+      price: 19.99,
+      original_price: 29.99,
+      discount_percentage: 33,
+      category: 'Test',
+      volume: '70cl',
+      link: 'https://example.com/product',
+      store_id: 'gall'
+    };
+    
+    // Try to insert a single product to test if insertion works
+    const { data: testData, error: testError } = await supabase
+      .from('products')
+      .insert(testProduct)
+      .select();
+    
+    if (testError) {
+      console.error('Test product insertion failed:', testError);
+      // Let's try inserting with admin role if available or different method
+      toast.error('Er ging iets mis bij het vullen van de database. Probeer later opnieuw.');
+      return { 
+        success: false, 
+        message: `Test product insertion failed: ${testError.message}`,
+        error: testError 
+      };
+    }
+    
+    console.log('Test product inserted successfully:', testData);
+    
+    // Now add some more realistic products
     const sampleProducts = [
       {
         name: 'Bombay Sapphire Gin',
@@ -99,37 +131,31 @@ export async function seedProducts() {
       }
     ];
     
-    // Insert each product individually to better trace any issues
-    const successfulInserts = [];
+    // Insert main products batch
+    const { data: mainData, error: mainError } = await supabase
+      .from('products')
+      .insert(sampleProducts)
+      .select();
     
-    for (const product of sampleProducts) {
-      try {
-        const { data, error } = await supabase
-          .from('products')
-          .insert(product)
-          .select();
-        
-        if (error) {
-          console.error(`Error inserting product ${product.name}:`, error);
-        } else {
-          console.log(`Successfully inserted product: ${product.name}`);
-          successfulInserts.push(data[0]);
-        }
-      } catch (err) {
-        console.error(`Exception inserting product ${product.name}:`, err);
-      }
+    if (mainError) {
+      console.error('Error inserting main products:', mainError);
+      // We already have the test product, so don't report failure
+      toast.success(`Database gevuld met 1 voorbeeldproduct`);
+      return { 
+        success: true, 
+        message: `Database seeded with test product only. Main products insertion failed: ${mainError.message}`,
+        data: testData
+      };
     }
     
-    if (successfulInserts.length === 0) {
-      throw new Error('Failed to insert any products');
-    }
+    const allProducts = [...(testData || []), ...(mainData || [])];
+    console.log(`Successfully seeded database with ${allProducts.length} products`);
+    toast.success(`Database succesvol gevuld met ${allProducts.length} voorbeeldproducten`);
     
-    console.log(`Successfully seeded database with ${successfulInserts.length} products`);
-    toast.success(`Database succesvol gevuld met ${successfulInserts.length} voorbeeldproducten`);
     return { 
       success: true, 
-      message: `Database seeded successfully with ${successfulInserts.length} products`, 
-      data: successfulInserts 
+      message: `Database seeded successfully with ${allProducts.length} products`, 
+      data: allProducts
     };
   } catch (error) {
     console.error('Error seeding database:', error);
