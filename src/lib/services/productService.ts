@@ -31,6 +31,8 @@ const mapDbRowToProduct = (row: any): Product => {
 
 export async function fetchProducts(filters?: ProductFilters): Promise<Product[]> {
   try {
+    console.log('Fetching products with filters:', filters);
+    
     let query = supabase
       .from('products')
       .select(`
@@ -43,7 +45,7 @@ export async function fetchProducts(filters?: ProductFilters): Promise<Product[]
     
     // Apply filters
     if (filters) {
-      // Filter by category - fix case sensitivity by using case-insensitive comparison
+      // Filter by category - use case-insensitive comparison
       if (filters.category) {
         query = query.ilike('category', `%${filters.category}%`);
       }
@@ -71,10 +73,14 @@ export async function fetchProducts(filters?: ProductFilters): Promise<Product[]
     
     const { data, error } = await query;
     
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
+    }
     
-    // Let's add some debugging to see what's coming back
-    console.log('Products fetched:', data && data.length);
+    // Log the raw data we received
+    console.log('Products fetched raw data:', data);
+    console.log('Number of products returned:', data?.length);
     
     // Transform database rows to Product objects
     return (data || []).map(mapDbRowToProduct);

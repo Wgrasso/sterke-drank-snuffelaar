@@ -5,12 +5,19 @@ import { toast } from 'sonner';
 // This function can be called to populate the database with sample products
 export async function seedProducts() {
   try {
+    console.log('Starting database seed process...');
+    
     // Check if we already have products
     const { count, error: countError } = await supabase
       .from('products')
       .select('*', { count: 'exact', head: true });
     
-    if (countError) throw countError;
+    if (countError) {
+      console.error('Error checking product count:', countError);
+      throw countError;
+    }
+    
+    console.log('Current product count:', count);
     
     // If we already have products, don't seed again
     if (count && count > 0) {
@@ -23,10 +30,16 @@ export async function seedProducts() {
       .from('stores')
       .select('*');
       
-    if (storesError) throw storesError;
+    if (storesError) {
+      console.error('Error checking stores:', storesError);
+      throw storesError;
+    }
+    
+    console.log('Existing stores:', stores);
     
     // If no stores exist, create them
     if (!stores || stores.length === 0) {
+      console.log('No stores found, creating stores...');
       const storeData = [
         { id: 'gall', name: 'Gall & Gall', logo: '/gall-logo.svg' },
         { id: 'ah', name: 'Albert Heijn', logo: '/ah-logo.svg' },
@@ -39,9 +52,15 @@ export async function seedProducts() {
         .from('stores')
         .insert(storeData);
         
-      if (insertStoresError) throw insertStoresError;
+      if (insertStoresError) {
+        console.error('Error inserting stores:', insertStoresError);
+        throw insertStoresError;
+      }
+      
+      console.log('Stores created successfully');
     }
     
+    console.log('Inserting sample products...');
     const sampleProducts = [
       {
         name: 'Bombay Sapphire Gin',
@@ -156,17 +175,22 @@ export async function seedProducts() {
     ];
     
     // Insert sample products
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('products')
-      .insert(sampleProducts);
+      .insert(sampleProducts)
+      .select();
     
-    if (error) throw error;
+    if (error) {
+      console.error('Error inserting products:', error);
+      throw error;
+    }
     
-    console.log('Successfully seeded database with sample products');
-    return { success: true, message: 'Database seeded successfully' };
+    console.log('Successfully seeded database with sample products:', data);
+    toast.success('Database succesvol gevuld met voorbeeldproducten');
+    return { success: true, message: 'Database seeded successfully', data };
   } catch (error) {
     console.error('Error seeding database:', error);
     toast.error('Er ging iets mis bij het vullen van de database.');
-    return { success: false, message: 'Error seeding database' };
+    return { success: false, message: `Error seeding database: ${error instanceof Error ? error.message : String(error)}` };
   }
 }
