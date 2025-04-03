@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { scrapeDeals } from '@/lib/services/productService';
+import { scrapeDeals } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Database, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
@@ -8,15 +8,16 @@ import { toast } from 'sonner';
 interface ScraperButtonProps {
   onSuccess?: () => void;
   compact?: boolean;
+  storeIds?: string[];
 }
 
-const ScraperButton = ({ onSuccess, compact = false }: ScraperButtonProps) => {
+const ScraperButton = ({ onSuccess, compact = false, storeIds }: ScraperButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleScrape = async () => {
     setIsLoading(true);
     try {
-      const result = await scrapeDeals();
+      const result = await scrapeDeals(storeIds);
       if (result.success) {
         toast.success('Aanbiedingen succesvol bijgewerkt!');
         if (onSuccess) onSuccess();

@@ -6,7 +6,8 @@ export {
   fetchProductById, 
   fetchFeaturedProducts,
   fetchProductsByCategory,
-  scrapeDeals
+  scrapeDeals,
+  scrapeSpecificUrl
 } from './services/productService';
 
 // For backward compatibility, re-export the store functions 
