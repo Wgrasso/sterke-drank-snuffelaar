@@ -12,8 +12,29 @@ import StoreLogos from '@/components/StoreLogos';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { seedProducts } from '@/lib/utils/seedDatabase';
 
 const Index = () => {
+  const [isSeeding, setIsSeeding] = useState(false);
+
+  // Seed database with sample products on first load
+  useEffect(() => {
+    const initializeDatabase = async () => {
+      if (!isSeeding) {
+        setIsSeeding(true);
+        try {
+          await seedProducts();
+        } catch (error) {
+          console.error('Error initializing database:', error);
+        } finally {
+          setIsSeeding(false);
+        }
+      }
+    };
+
+    initializeDatabase();
+  }, []);
+
   const { data: featuredProducts, isLoading } = useQuery({
     queryKey: ['featuredProducts'],
     queryFn: () => fetchFeaturedProducts(8),

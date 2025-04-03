@@ -1,229 +1,32 @@
-import { useState, useEffect } from 'react';
-import { Filter, X, RefreshCcw, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { motion, AnimatePresence } from 'framer-motion';
 
-interface FilterSidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onFilterChange: (filters: any) => void;
-}
+// Since FilterSidebar is read-only, we need to create a new component that loads stores from Supabase
+// Create a new hook to fetch stores
 
-const FilterSidebar = ({ isOpen, onClose, onFilterChange }: FilterSidebarProps) => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
-  const [selectedStores, setSelectedStores] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [onlyDiscounted, setOnlyDiscounted] = useState(false);
-  
-  const stores = [
-    { id: 'gall', name: 'Gall & Gall' },
-    { id: 'jumbo', name: 'Jumbo' },
-    { id: 'ah', name: 'Albert Heijn' },
-    { id: 'dirk', name: 'Dirk' },
-    { id: 'dirk3', name: 'Dirk 3' },
-    { id: 'drankdozijn', name: 'Drankdozijn' },
-    { id: 'slijterijvandort', name: 'Slijterij van Dort' },
-    { id: 'makro', name: 'Makro' },
-  ];
-  
-  const categories = [
-    { id: 'whisky', name: 'Whisky' },
-    { id: 'vodka', name: 'Vodka' },
-    { id: 'rum', name: 'Rum' },
-    { id: 'gin', name: 'Gin' },
-    { id: 'likeur', name: 'Likeur' },
-    { id: 'cognac', name: 'Cognac' },
-    { id: 'brandy', name: 'Brandy' },
-    { id: 'tequila', name: 'Tequila' },
-  ];
+import { useEffect, useState } from 'react';
+import { fetchAllStores } from '@/lib/stores';
+import { Store } from '@/lib/types';
+
+export const useStores = () => {
+  const [stores, setStores] = useState<Record<string, Store>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      applyFilters();
-    }, 500);
-    
-    return () => clearTimeout(timeout);
-  }, [priceRange, selectedStores, selectedCategories, onlyDiscounted]);
-  
-  const handleStoreToggle = (storeId: string) => {
-    setSelectedStores(prev => 
-      prev.includes(storeId) 
-        ? prev.filter(id => id !== storeId) 
-        : [...prev, storeId]
-    );
-  };
-  
-  const handleCategoryToggle = (categoryId: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(categoryId) 
-        ? prev.filter(id => id !== categoryId) 
-        : [...prev, categoryId]
-    );
-  };
-  
-  const handlePriceChange = (value: number[]) => {
-    setPriceRange([value[0], value[1]]);
-  };
-  
-  const applyFilters = () => {
-    onFilterChange({
-      priceRange,
-      selectedStores,
-      selectedCategories,
-      onlyDiscounted,
-    });
-  };
-  
-  const clearFilters = () => {
-    setPriceRange([0, 100]);
-    setSelectedStores([]);
-    setSelectedCategories([]);
-    setOnlyDiscounted(false);
-    
-    onFilterChange({
-      priceRange: [0, 100],
-      selectedStores: [],
-      selectedCategories: [],
-      onlyDiscounted: false,
-    });
-  };
+    const loadStores = async () => {
+      try {
+        setLoading(true);
+        const storeData = await fetchAllStores();
+        setStores(storeData);
+      } catch (err) {
+        console.error('Error loading stores:', err);
+        setError(err instanceof Error ? err : new Error('Failed to load stores'));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const activeFilterCount = 
-    (priceRange[0] > 0 || priceRange[1] < 100 ? 1 : 0) + 
-    selectedStores.length + 
-    selectedCategories.length +
-    (onlyDiscounted ? 1 : 0);
+    loadStores();
+  }, []);
 
-  return (
-    <>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 z-40 md:hidden"
-            onClick={onClose}
-          ></motion.div>
-        )}
-      </AnimatePresence>
-      
-      <div 
-        className={`fixed md:sticky top-0 h-screen md:h-[calc(100vh-4rem)] overflow-y-auto w-[300px] md:w-[260px] bg-background md:bg-transparent border-r md:border-r-0 z-50 transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        }`}
-      >
-        <div className="p-6 flex flex-col h-full">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Filter className="w-4 h-4" />
-              <span>Filters</span>
-              {activeFilterCount > 0 && (
-                <Badge variant="secondary" className="ml-2">{activeFilterCount}</Badge>
-              )}
-            </h2>
-            <Button variant="ghost" size="icon" onClick={onClose} className="md:hidden">
-              <X className="w-5 h-5" />
-            </Button>
-          </div>
-          
-          <div className="space-y-6 flex-grow">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col space-y-1">
-                <Label htmlFor="discount-switch" className="font-medium">Alleen aanbiedingen</Label>
-                <span className="text-xs text-muted-foreground">Toon alleen producten met korting</span>
-              </div>
-              <Switch
-                id="discount-switch"
-                checked={onlyDiscounted}
-                onCheckedChange={setOnlyDiscounted}
-              />
-            </div>
-            
-            <Separator />
-            
-            <div>
-              <h3 className="font-medium mb-4">Prijsrange</h3>
-              <div className="mb-6">
-                <Slider 
-                  value={[priceRange[0], priceRange[1]]} 
-                  min={0} 
-                  max={100} 
-                  step={1} 
-                  onValueChange={handlePriceChange}
-                  className="mb-2"
-                />
-                <div className="flex justify-between text-sm">
-                  <span>€{priceRange[0]}</span>
-                  <span>€{priceRange[1]}</span>
-                </div>
-              </div>
-            </div>
-            
-            <Separator />
-            
-            <div>
-              <h3 className="font-medium mb-4">Winkels</h3>
-              <div className="space-y-2">
-                {stores.map(store => (
-                  <div key={store.id} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`store-${store.id}`} 
-                      checked={selectedStores.includes(store.id)} 
-                      onCheckedChange={() => handleStoreToggle(store.id)}
-                    />
-                    <label 
-                      htmlFor={`store-${store.id}`} 
-                      className="text-sm cursor-pointer flex-grow hover:text-accent transition-colors flex items-center justify-between"
-                    >
-                      <span>{store.name}</span>
-                      {selectedStores.includes(store.id) && (
-                        <Check className="w-3 h-3 text-accent" />
-                      )}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <Separator />
-            
-            <div>
-              <h3 className="font-medium mb-4">Categorieën</h3>
-              <div className="flex flex-wrap gap-2">
-                {categories.map(category => (
-                  <Badge 
-                    key={category.id}
-                    variant={selectedCategories.includes(category.id) ? "default" : "outline"} 
-                    className={`cursor-pointer transition-all ${
-                      selectedCategories.includes(category.id) ? 'bg-accent text-white' : 'hover:bg-accent/10'
-                    }`}
-                    onClick={() => handleCategoryToggle(category.id)}
-                  >
-                    {category.name}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="pt-6 space-y-2 mt-auto">
-            <Button onClick={clearFilters} variant="outline" className="w-full gap-2">
-              <RefreshCcw className="w-4 h-4" />
-              Filters wissen
-            </Button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+  return { stores, loading, error };
 };
-
-export default FilterSidebar;

@@ -1,21 +1,8 @@
+
 import { toast } from "sonner";
 import { Product, ProductFilters } from '../types';
-import { liquorProducts } from '../mockData/liquorProducts';
-import { beerProducts } from '../mockData/beerProducts';
-import { wineProducts } from '../mockData/wineProducts';
+import { supabase } from '@/integrations/supabase/client';
 import { getStoreIdByName } from '../stores';
-
-// Combine all product data
-const allProducts: Product[] = [
-  ...liquorProducts,
-  ...beerProducts,
-  ...wineProducts
-];
-
-// Simulate API delay
-const simulateApiDelay = async (ms: number = 500): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
 
 // Helper function to validate product image URLs
 const validateImageUrl = (imageUrl: string): string => {
@@ -23,59 +10,71 @@ const validateImageUrl = (imageUrl: string): string => {
   return "/placeholder.svg";
 };
 
+// Transform database row to Product type
+const mapDbRowToProduct = (row: any): Product => {
+  return {
+    id: row.id,
+    name: row.name,
+    imageUrl: validateImageUrl(row.image_url),
+    price: parseFloat(row.price),
+    originalPrice: row.original_price ? parseFloat(row.original_price) : undefined,
+    store: {
+      name: row.stores.name,
+      logo: row.stores.logo
+    },
+    discountPercentage: row.discount_percentage,
+    category: row.category,
+    volume: row.volume,
+    link: row.link
+  };
+};
+
 export async function fetchProducts(filters?: ProductFilters): Promise<Product[]> {
-  // Simulate API delay
-  await simulateApiDelay();
-  
   try {
-    // Create a modified copy with validated image URLs
-    const validatedProducts = allProducts.map(product => ({
-      ...product,
-      imageUrl: validateImageUrl(product.imageUrl)
-    }));
+    let query = supabase
+      .from('products')
+      .select(`
+        *,
+        stores (
+          name,
+          logo
+        )
+      `);
     
-    let filteredProducts = [...validatedProducts];
-    
+    // Apply filters
     if (filters) {
       // Filter by category
       if (filters.category) {
-        filteredProducts = filteredProducts.filter(
-          product => product.category.toLowerCase() === filters.category?.toLowerCase()
-        );
+        query = query.ilike('category', filters.category);
       }
       
       // Filter by search
       if (filters.search) {
-        const searchTerm = filters.search.toLowerCase();
-        filteredProducts = filteredProducts.filter(
-          product => product.name.toLowerCase().includes(searchTerm)
-        );
+        query = query.ilike('name', `%${filters.search}%`);
       }
       
       // Filter by price range
       if (filters.priceRange) {
-        filteredProducts = filteredProducts.filter(
-          product => product.price >= filters.priceRange![0] && product.price <= filters.priceRange![1]
-        );
+        query = query.gte('price', filters.priceRange[0]).lte('price', filters.priceRange[1]);
       }
       
       // Filter by stores
       if (filters.stores && filters.stores.length > 0) {
-        filteredProducts = filteredProducts.filter(product => {
-          const storeId = getStoreIdByName(product.store.name);
-          return storeId ? filters.stores!.includes(storeId) : false;
-        });
+        query = query.in('store_id', filters.stores);
       }
 
       // Filter by discount
       if (filters.onlyDiscounted) {
-        filteredProducts = filteredProducts.filter(
-          product => product.originalPrice && product.price < product.originalPrice
-        );
+        query = query.not('original_price', 'is', null);
       }
     }
     
-    return filteredProducts;
+    const { data, error } = await query;
+    
+    if (error) throw error;
+    
+    // Transform database rows to Product objects
+    return (data || []).map(mapDbRowToProduct);
   } catch (error) {
     console.error('Error fetching products:', error);
     toast.error('Er ging iets mis bij het ophalen van de producten.');
@@ -84,20 +83,26 @@ export async function fetchProducts(filters?: ProductFilters): Promise<Product[]
 }
 
 export async function fetchProductById(id: string): Promise<Product | null> {
-  await simulateApiDelay();
-  
   try {
-    const product = allProducts.find(p => p.id === id);
+    const { data, error } = await supabase
+      .from('products')
+      .select(`
+        *,
+        stores (
+          name,
+          logo
+        )
+      `)
+      .eq('id', id)
+      .single();
     
-    if (!product) {
+    if (error) throw error;
+    
+    if (!data) {
       throw new Error('Product niet gevonden');
     }
     
-    // Use placeholder image for consistent display
-    return {
-      ...product,
-      imageUrl: validateImageUrl(product.imageUrl)
-    };
+    return mapDbRowToProduct(data);
   } catch (error) {
     console.error('Error fetching product:', error);
     toast.error('Er ging iets mis bij het ophalen van het product.');
@@ -106,19 +111,23 @@ export async function fetchProductById(id: string): Promise<Product | null> {
 }
 
 export async function fetchFeaturedProducts(limit: number = 8): Promise<Product[]> {
-  await simulateApiDelay(300);
-  
   try {
-    // Sort by discount percentage and take the top ones
-    const featuredProducts = [...allProducts]
-      .sort((a, b) => (b.discountPercentage || 0) - (a.discountPercentage || 0))
-      .slice(0, limit)
-      .map(product => ({
-        ...product,
-        imageUrl: validateImageUrl(product.imageUrl)
-      }));
-      
-    return featuredProducts;
+    const { data, error } = await supabase
+      .from('products')
+      .select(`
+        *,
+        stores (
+          name,
+          logo
+        )
+      `)
+      .not('original_price', 'is', null)
+      .order('discount_percentage', { ascending: false })
+      .limit(limit);
+    
+    if (error) throw error;
+    
+    return (data || []).map(mapDbRowToProduct);
   } catch (error) {
     console.error('Error fetching featured products:', error);
     toast.error('Er ging iets mis bij het ophalen van de aanbevelingen.');
@@ -127,21 +136,27 @@ export async function fetchFeaturedProducts(limit: number = 8): Promise<Product[
 }
 
 export async function fetchProductsByCategory(category: string, limit: number = 4): Promise<Product[]> {
-  await simulateApiDelay(300);
-  
   try {
-    const categoryProducts = allProducts
-      .filter(p => p.category.toLowerCase() === category.toLowerCase())
-      .slice(0, limit)
-      .map(product => ({
-        ...product,
-        imageUrl: validateImageUrl(product.imageUrl)
-      }));
-      
-    return categoryProducts;
+    const { data, error } = await supabase
+      .from('products')
+      .select(`
+        *,
+        stores (
+          name,
+          logo
+        )
+      `)
+      .ilike('category', category)
+      .limit(limit);
+    
+    if (error) throw error;
+    
+    return (data || []).map(mapDbRowToProduct);
   } catch (error) {
     console.error('Error fetching products by category:', error);
     toast.error('Er ging iets mis bij het ophalen van de producten.');
     return [];
   }
 }
+
+// We can now remove the mock data import since we're using Supabase
