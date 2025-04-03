@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 import { Product, ProductFilters } from '../types';
 import { supabase } from '@/integrations/supabase/client';
@@ -165,5 +164,46 @@ export async function fetchProductsByCategory(category: string, limit: number = 
     console.error('Error fetching products by category:', error);
     toast.error('Er ging iets mis bij het ophalen van de producten.');
     return [];
+  }
+}
+
+export async function scrapeDeals(storeIds?: string[]): Promise<{success: boolean, message: string}> {
+  try {
+    const url = 'https://yytunwhezparvofxkjds.supabase.co/functions/v1/scrape-deals';
+    
+    toast.info('Bezig met het verzamelen van aanbiedingen...');
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabase.auth.getSession()}`
+      },
+      body: JSON.stringify({ storeIds })
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API responded with status ${response.status}: ${errorText}`);
+    }
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      toast.success(`${result.products?.length || 0} aanbiedingen toegevoegd!`);
+      return { 
+        success: true, 
+        message: `Successfully scraped ${result.products?.length || 0} products` 
+      };
+    } else {
+      throw new Error(result.error || 'Unknown error during scraping');
+    }
+  } catch (error) {
+    console.error('Error scraping deals:', error);
+    toast.error('Er ging iets mis bij het verzamelen van aanbiedingen.');
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : String(error)
+    };
   }
 }
